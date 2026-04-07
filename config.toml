@@ -1,0 +1,4 @@
+baseURL = 'https://ronymarcolino.github.io/'
+languageCode = 'pt-br'
+title = 'Rony Marcolino Blog'
+theme = 'paper'
