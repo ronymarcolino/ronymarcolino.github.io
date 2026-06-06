@@ -1,4 +1,21 @@
 baseURL = 'https://ronymarcolino.github.io/'
 languageCode = 'pt-br'
+defaultContentLanguage = 'pt'
 title = 'Rony Marcolino Blog'
 theme = 'paper'
+
+[params]
+  color = 'light'
+  monoDarkIcon = true
+  avatar = 'https://github.com/ronymarcolino.png'
+  name = 'Rony Marcolino'
+  bio = 'Desenvolvedor de software escrevendo sobre IA, Ciência da Computação e Programação.'
+  github = 'ronymarcolino'
+  mainSections = ['2026', 'portuguese']
+
+[menu]
+  [[menu.main]]
+    identifier = 'about'
+    name = 'Sobre'
+    url = '/about/'
+    weight = 10
