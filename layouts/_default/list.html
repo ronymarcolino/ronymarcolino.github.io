@@ -1,0 +1,54 @@
+{{- define "main" -}}
+
+{{- if .IsHome -}}
+{{- else if and .Title (eq .Type "tags") -}}
+<header class="not-prose taxonomy-header">
+  <p class="blog-kicker">Tag</p>
+  <h1>#{{- .Title -}}</h1>
+</header>
+{{- else if .Title -}}
+<header class="not-prose taxonomy-header">
+  <p class="blog-kicker">Arquivo</p>
+  <h1>{{- .Title -}}</h1>
+</header>
+{{- end -}}
+
+{{- $pages := union .RegularPages .Sections -}}
+{{ $pages := .Pages }}
+{{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
+{{ range (where $pages "Section" "!=" "") }}
+{{- end -}}
+
+{{- $paginator := .Paginate $pages -}}
+
+<div class="not-prose post-feed">
+  {{- range $paginator.Pages -}}
+  <article class="post-card">
+    <a href="{{- .Permalink -}}" aria-label="Ler {{ .Title }}">
+      <div class="post-card-meta">
+        {{- if gt .Weight 0 -}}
+        <span>Em destaque</span>
+        {{- end -}}
+        <time datetime="{{ .Date.Format `2006-01-02` }}">{{- .Date | time.Format ":date_medium" -}}</time>
+      </div>
+      <h2>{{- .Title -}}</h2>
+      {{- with .Summary -}}
+      <p>{{- . | plainify | truncate 180 -}}</p>
+      {{- end -}}
+    </a>
+  </article>
+  {{- end -}}
+</div>
+
+{{- if gt $paginator.TotalPages 1 -}}
+<nav class="not-prose pager" aria-label="Paginacao">
+  {{- if $paginator.HasPrev -}}
+  <a class="blog-action" href="{{- $paginator.Prev.URL -}}">&larr; {{- i18n "prev_page" -}}</a>
+  {{- end -}}
+  {{- if $paginator.HasNext -}}
+  <a class="blog-action" href="{{- $paginator.Next.URL -}}">{{- i18n "next_page" -}} &rarr;</a>
+  {{- end -}}
+</nav>
+{{- end -}}
+
+{{- end -}}
