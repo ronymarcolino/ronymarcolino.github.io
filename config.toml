@@ -11,11 +11,16 @@ theme = 'paper'
   name = 'Rony Marcolino'
   bio = 'Desenvolvedor de software escrevendo sobre IA, Ciência da Computação e Programação.'
   github = 'ronymarcolino'
-  mainSections = ['2026', 'portuguese']
+  mainSections = ['2023', '2026']
 
 [menu]
   [[menu.main]]
     identifier = 'about'
     name = 'Sobre'
     url = '/about/'
+    weight = 10
+  [[menu.main]]
+    identifier = 'Currículo'
+    name = 'Currículo'
+    url = '/resume/'
     weight = 10
