@@ -14,10 +14,10 @@
 {{- end -}}
 
 {{- $pages := union .RegularPages .Sections -}}
-{{ $pages := .Pages }}
-{{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
-{{ range (where $pages "Section" "!=" "") }}
+{{- if .IsHome -}}
+  {{- $pages = where site.RegularPages "Section" "in" site.Params.mainSections -}}
 {{- end -}}
+{{- $pages = $pages.ByDate.Reverse -}}
 
 {{- $paginator := .Paginate $pages -}}
 
