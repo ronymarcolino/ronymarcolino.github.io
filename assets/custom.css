@@ -51,7 +51,9 @@ body::before,
   background-color: var(--site-bg) !important;
 }
 
-header {
+/* Apenas o cabecalho do site e fixo. Sem `body >` a regra pegava tambem os
+   <header> dentro do <main> (hero, arquivo, titulo do post). */
+body > header {
   position: sticky;
   top: 0;
   z-index: 60;
@@ -61,11 +63,11 @@ header {
   -webkit-backdrop-filter: blur(18px);
 }
 
-header a {
+body > header a {
   text-decoration: none;
 }
 
-header > div:first-child > a {
+body > header > div:first-child > a {
   color: var(--site-ink);
   font-weight: 700;
 }
@@ -76,18 +78,12 @@ header > div:first-child > a {
 }
 
 .nav-wrapper a:hover,
-header > div:first-child > a:hover {
+body > header > div:first-child > a:hover {
   color: var(--site-accent-strong);
 }
 
 main.prose {
   padding-top: 3.25rem;
-}
-
-main p {
-  text-align: justify;
-  text-justify: inter-word;
-  hyphens: auto;
 }
 
 .blog-hero {
@@ -106,12 +102,33 @@ main p {
 
 .blog-hero h1,
 .taxonomy-header h1 {
-  max-width: 12ch;
   margin: 0;
   color: var(--site-ink);
   font-size: 2.55rem;
   line-height: 1.04;
   font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.blog-hero-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.blog-hero-avatar {
+  width: 4rem;
+  height: 4rem;
+  flex-shrink: 0;
+  border: 1px solid var(--site-border);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.blog-hero-text {
+  flex: 1 1 16rem;
+  min-width: 0;
 }
 
 .blog-hero p {
@@ -154,14 +171,17 @@ main p {
   transform: translateY(-1px);
 }
 
+/* O texto acompanha o fundo do site: no dark o accent-strong e claro (menta),
+   entao branco fixo ficaria ilegivel. */
 .blog-action-primary {
   border-color: var(--site-accent-strong);
-  color: #ffffff;
+  color: var(--site-bg);
   background: var(--site-accent-strong);
 }
 
 .blog-action-primary:hover {
-  color: #ffffff;
+  border-color: var(--site-accent);
+  color: var(--site-bg);
   background: var(--site-accent);
 }
 
@@ -232,7 +252,6 @@ main p {
   color: var(--site-muted);
   font-size: 0.98rem;
   line-height: 1.68;
-  padding-left: 10px;
 }
 
 .post-card-link {
@@ -254,13 +273,9 @@ article {
 }
 
 article > header {
-  position: static;
-  z-index: auto;
-  margin-bottom: 2rem !important;
+  margin-bottom: 2rem;
   padding-bottom: 1.4rem;
   border-bottom: 1px solid var(--site-border);
-  background: transparent;
-  backdrop-filter: none;
 }
 
 article > header h1 {
@@ -315,9 +330,9 @@ article time,
 .post-nav a {
   display: flex;
   min-height: 4.5rem;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.4rem;
+  justify-content: center;
   border: 1px solid var(--site-border);
   border-radius: 8px;
   padding: 1rem;
@@ -330,6 +345,46 @@ article time,
 .post-nav a:hover {
   border-color: var(--site-hover-border);
   color: var(--site-accent-strong);
+}
+
+.post-nav-label {
+  color: var(--site-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.post-nav-title {
+  font-weight: 700;
+}
+
+.term-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 2rem;
+}
+
+.term-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--site-border);
+  border-radius: 8px;
+  padding: 0.45rem 0.85rem;
+  color: var(--site-accent-strong);
+  background: var(--site-panel);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.term-list a:hover {
+  border-color: var(--site-hover-border);
+}
+
+.term-list span {
+  color: var(--site-muted);
+  font-size: 0.78rem;
 }
 
 .prose :where(a):not(:where(.not-prose, .not-prose *)) {
@@ -393,6 +448,11 @@ article time,
     font-size: 3.65rem;
   }
 
+  .blog-hero-avatar {
+    width: 5.25rem;
+    height: 5.25rem;
+  }
+
   .post-card a {
     padding: 1.65rem;
   }
@@ -405,14 +465,27 @@ article time,
     font-size: 3rem;
   }
 
+  /* Justificado so faz sentido com coluna larga; no celular abre buracos. */
+  main p {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+  }
+
   .post-nav {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .post-nav-next {
+    grid-column: 2;
+    align-items: flex-end;
+    text-align: right;
   }
 }
 
 @media (max-width: 47.99rem) {
-  header {
-    background: var(--site-bg);
+  main.prose {
+    padding-top: 2rem;
   }
 
   .blog-hero h1,
@@ -430,5 +503,20 @@ article time,
     justify-content: center;
     padding-top: 1rem;
     padding-bottom: 1rem;
+  }
+}
+
+/* O menu do tema so vira horizontal em `lg` (64rem). Abaixo disso ele e
+   `position: fixed; top: 100%` e vive dentro do <header>.
+
+   `backdrop-filter` faz do header o containing block dos descendentes fixed,
+   entao o `top: 100%` passava a valer 100% da altura do header (4.5rem) em vez
+   da altura da janela: o menu ficava visivel por cima do conteudo. Abaixo de
+   `lg` o header usa fundo solido e nenhum filtro. */
+@media (max-width: 63.99rem) {
+  body > header {
+    background: var(--site-bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 }
