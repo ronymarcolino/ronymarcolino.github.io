@@ -1,0 +1,8 @@
+{{- /*
+  Todos os posts do blog, do mais recente para o mais antigo.
+
+  As secoes sao anos (2014, 2023, 2026, ...), entao filtrar por uma lista fixa
+  como mainSections quebra a cada ano novo. Paginas soltas na raiz do content
+  (about, resume) ficam de fora porque nao pertencem a nenhuma secao.
+*/ -}}
+{{- return (where site.RegularPages "Section" "!=" "").ByDate.Reverse -}}

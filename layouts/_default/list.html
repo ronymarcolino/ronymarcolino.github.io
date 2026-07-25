@@ -1,30 +1,85 @@
 {{- define "main" -}}
 
 {{- if .IsHome -}}
-{{- else if and .Title (eq .Type "tags") -}}
+<header class="not-prose blog-hero">
+  <p class="blog-kicker">Blog</p>
+
+  <div class="blog-hero-main">
+    {{- with $.Scratch.Get "avatar_url" -}}
+    <img
+      class="blog-hero-avatar"
+      src="{{- . -}}"
+      alt="{{- site.Params.name | default site.Title -}}"
+      width="96"
+      height="96"
+    />
+    {{- end -}}
+
+    <div class="blog-hero-text">
+      <h1>{{- site.Params.name | default site.Title -}}</h1>
+      {{- with site.Params.bio -}}<p>{{- . -}}</p>{{- end -}}
+    </div>
+  </div>
+
+  <div class="blog-hero-actions">
+    <a class="blog-action blog-action-primary" href="{{- `about/` | absURL -}}"
+      >Sobre mim</a
+    >
+    <a class="blog-action" href="{{- `resume/` | absURL -}}">Curriculo</a>
+    {{- with site.Params.github -}}
+    <a
+      class="blog-action"
+      href="https://github.com/{{- . -}}"
+      rel="me noopener"
+      target="_blank"
+      >GitHub</a
+    >
+    {{- end -}}
+  </div>
+</header>
+{{- else if eq .Kind "term" -}}
 <header class="not-prose taxonomy-header">
-  <p class="blog-kicker">Tag</p>
-  <h1>#{{- .Title -}}</h1>
+  <p class="blog-kicker">{{- if eq .Type "tags" -}}Tag{{- else -}}Categoria{{- end -}}</p>
+  <h1>{{- if eq .Type "tags" -}}#{{- end -}}{{- .Title -}}</h1>
+</header>
+{{- else if eq .Kind "taxonomy" -}}
+<header class="not-prose taxonomy-header">
+  <p class="blog-kicker">Indice</p>
+  <h1>{{- if eq .Type "tags" -}}Tags{{- else -}}Categorias{{- end -}}</h1>
 </header>
 {{- else if .Title -}}
 <header class="not-prose taxonomy-header">
   <p class="blog-kicker">Arquivo</p>
-  <h1>{{- .Title -}}</h1>
+  <!-- .Title vira "2023s": o Hugo pluraliza o titulo automatico da secao. -->
+  <h1>{{- strings.TrimPrefix "/" .Path -}}</h1>
 </header>
 {{- end -}}
 
+{{- /* Paginas de taxonomia (/tags/, /categories/) listam termos, nao posts. */ -}}
+{{- if eq .Kind "taxonomy" -}}
+<div class="not-prose term-list">
+  {{- range .Pages -}}
+  <a href="{{- .RelPermalink -}}">
+    {{- if eq $.Type "tags" -}}#{{- end -}}{{- .Title -}}
+    <span>{{- len .Pages -}}</span>
+  </a>
+  {{- end -}}
+</div>
+{{- else -}}
+
 {{- $pages := union .RegularPages .Sections -}}
 {{- if .IsHome -}}
-  {{- $pages = where site.RegularPages "Section" "in" site.Params.mainSections -}}
+  {{- $pages = partial "posts.html" . -}}
+{{- else -}}
+  {{- $pages = $pages.ByDate.Reverse -}}
 {{- end -}}
-{{- $pages = $pages.ByDate.Reverse -}}
 
 {{- $paginator := .Paginate $pages -}}
 
 <div class="not-prose post-feed">
   {{- range $paginator.Pages -}}
   <article class="post-card">
-    <a href="{{- .Permalink -}}" aria-label="Ler {{ .Title }}">
+    <a href="{{- .Permalink -}}">
       <div class="post-card-meta">
         {{- if gt .Weight 0 -}}
         <span>Em destaque</span>
@@ -43,12 +98,14 @@
 {{- if gt $paginator.TotalPages 1 -}}
 <nav class="not-prose pager" aria-label="Paginacao">
   {{- if $paginator.HasPrev -}}
-  <a class="blog-action" href="{{- $paginator.Prev.URL -}}">&larr; {{- i18n "prev_page" -}}</a>
+  <a class="blog-action" href="{{- $paginator.Prev.URL -}}">&larr; {{ i18n "prev_page" }}</a>
   {{- end -}}
   {{- if $paginator.HasNext -}}
-  <a class="blog-action" href="{{- $paginator.Next.URL -}}">{{- i18n "next_page" -}} &rarr;</a>
+  <a class="blog-action" href="{{- $paginator.Next.URL -}}">{{ i18n "next_page" }} &rarr;</a>
   {{- end -}}
 </nav>
+{{- end -}}
+
 {{- end -}}
 
 {{- end -}}

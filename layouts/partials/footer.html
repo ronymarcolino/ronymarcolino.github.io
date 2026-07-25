@@ -1,0 +1,21 @@
+<footer class="site-footer">
+  <div>
+    {{- if site.Copyright -}}
+    {{- site.Copyright -}}
+    {{- else -}}
+    &copy; {{ now.Year }}
+    <a href="{{- `` | absURL -}}">{{- site.Title -}}</a>
+    {{- end -}}
+  </div>
+
+  <nav aria-label="Rodape">
+    <a href="{{- `index.xml` | absURL -}}" rel="alternate">RSS</a>
+    <a href="https://gohugo.io/" rel="noopener" target="_blank">Hugo</a>
+    <a
+      href="https://github.com/nanxiaobei/hugo-paper"
+      rel="noopener"
+      target="_blank"
+      >Paper</a
+    >
+  </nav>
+</footer>
