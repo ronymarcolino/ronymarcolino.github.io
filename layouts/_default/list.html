@@ -25,7 +25,7 @@
     <a class="blog-action blog-action-primary" href="{{- `about/` | absURL -}}"
       >Sobre mim</a
     >
-    <a class="blog-action" href="{{- `resume/` | absURL -}}">Curriculo</a>
+    <a class="blog-action" href="{{- `resume/` | absURL -}}">Currículo</a>
     {{- with site.Params.github -}}
     <a
       class="blog-action"
@@ -44,7 +44,7 @@
 </header>
 {{- else if eq .Kind "taxonomy" -}}
 <header class="not-prose taxonomy-header">
-  <p class="blog-kicker">Indice</p>
+  <p class="blog-kicker">Índice</p>
   <h1>{{- if eq .Type "tags" -}}Tags{{- else -}}Categorias{{- end -}}</h1>
 </header>
 {{- else if .Title -}}
@@ -96,7 +96,7 @@
 </div>
 
 {{- if gt $paginator.TotalPages 1 -}}
-<nav class="not-prose pager" aria-label="Paginacao">
+<nav class="not-prose pager" aria-label="Paginação">
   {{- if $paginator.HasPrev -}}
   <a class="blog-action" href="{{- $paginator.Prev.URL -}}">&larr; {{ i18n "prev_page" }}</a>
   {{- end -}}
