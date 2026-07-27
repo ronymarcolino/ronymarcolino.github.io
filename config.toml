@@ -4,6 +4,10 @@ defaultContentLanguage = 'pt'
 title = 'Rony Marcolino Blog'
 theme = 'paper'
 
+[services]
+  [services.googleAnalytics]
+    ID = 'G-DMKJLP2621'
+
 [params]
   color = 'light'
   monoDarkIcon = true
